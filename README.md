@@ -2,6 +2,9 @@
 
 # 📊 Blinkit Data Analysis Project
 
+![Blinkit data analysis_page-0001](https://github.com/user-attachments/assets/f5464490-1f51-4b35-993b-ea4d7f1a349e)
+
+
 ## 📌 Case Study
 
 Blinkit is one of India’s leading quick-commerce grocery delivery companies.
@@ -37,17 +40,6 @@ The dataset **`BlinkIT Grocery Data.xlsx`** consists of transactional and catego
 
 ---
 
-## 📊 ER Diagram
-
-```
-Product (Item Identifier) ─────< Sales >───── (Outlet Identifier) Outlet
-```
-
-* One-to-Many between **Product** and **Sales**
-* One-to-Many between **Outlet** and **Sales**
-
----
-
 ## 🧹 Data Cleaning
 
 * ✅ Handled **missing values** in `Item Weight` and `Sales`
@@ -67,21 +59,54 @@ Product (Item Identifier) ─────< Sales >───── (Outlet Identi
 * 💰 Total Sales: **₹1.2M**
 * 📉 Average Sales per Item: **₹141**
 
-**Key Findings:**
 
-* 🥦 **Top-Selling Category:** *Fruits and Vegetables* with sales of **₹178K**
-* 🏬 **Best-Performing Outlet:** *OUT035* with sales of **₹133K**
-* 🥛 **Fat Content Impact:** *Low Fat* products generated the highest sales (**₹717K**)
-* 🏙️ **Outlet Insights:** Outlets with larger size and Tier 3 locations show better performance
-* 📊 **Customer Ratings:** Majority of products maintain a **rating of 4–5**, positively correlated with higher sales
+---
 
-**KPIs Monitored:**
+## 🧮 Measures & DAX Formulas
 
-* 💰 Total Sales
-* 📦 Average Sales per Outlet
-* 🏷️ Sales by Item Category
-* 🍔 Sales by Fat Content
-* 🏬 Outlet Growth over Time
+The following **DAX measures** were created in Power BI for analysis:
+
+```DAX
+-- Total Sales
+Total Sales = SUM('BlinkIT Grocery Data'[Sales])
+
+-- Average Sales
+Average Sales = AVERAGE('BlinkIT Grocery Data'[Sales])
+
+-- Total Items Sold
+Total Items = COUNT('BlinkIT Grocery Data'[Item Identifier])
+
+-- Average Rating
+Average Rating = AVERAGE('BlinkIT Grocery Data'[Rating])
+
+-- Sales by Fat Content
+Sales by Fat Content = 
+    CALCULATE(
+        SUM('BlinkIT Grocery Data'[Sales]),
+        ALLEXCEPT('BlinkIT Grocery Data', 'BlinkIT Grocery Data'[Item Fat Content])
+    )
+
+-- Sales by Outlet
+Sales by Outlet = 
+    CALCULATE(
+        SUM('BlinkIT Grocery Data'[Sales]),
+        ALLEXCEPT('BlinkIT Grocery Data', 'BlinkIT Grocery Data'[Outlet Identifier])
+    )
+
+-- Yearly Sales Growth
+Yearly Sales Growth = 
+    DIVIDE(
+        (SUM('BlinkIT Grocery Data'[Sales]) - CALCULATE(SUM('BlinkIT Grocery Data'[Sales]), DATEADD('BlinkIT Grocery Data'[Outlet Establishment Year], -1, YEAR))),
+        CALCULATE(SUM('BlinkIT Grocery Data'[Sales]), DATEADD('BlinkIT Grocery Data'[Outlet Establishment Year], -1, YEAR))
+    )
+
+-- Sales Contribution %
+Sales Contribution % = 
+    DIVIDE(
+        SUM('BlinkIT Grocery Data'[Sales]),
+        CALCULATE(SUM('BlinkIT Grocery Data'[Sales]), ALL('BlinkIT Grocery Data'))
+    )
+```
 
 ---
 
@@ -102,3 +127,4 @@ Product (Item Identifier) ─────< Sales >───── (Outlet Identi
 ---
 
 ✨ This project provides **data-driven insights** into Blinkit’s grocery sales and helps in **strategic decision-making** for product placement, store optimization, and customer satisfaction.
+
