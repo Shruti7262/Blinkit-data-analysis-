@@ -1,7 +1,4 @@
-# Blinkit-data-analysis
-Restaurant Ratings Analysis using Microsoft Power BI
 
----
 
 # 📊 Blinkit Data Analysis Project
 
